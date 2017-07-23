@@ -1,6 +1,8 @@
-# Bolex 18-5 Support
+# Bolex 18-5
 
-These parts are from [Rob Scott's Bolex 18-5 build](http://rob.scottclan.cc/2017/07/telecine-project-part-1/).
+These parts are from [Rob Scott's Bolex 18-5 build](http://rob.scottclan.cc/2017/07/telecine-project-part-1/). The [Bolex 18-5](http://www.bolexcollector.com/projectors/185.html) is a standard 8mm silent projector manufactured from 1961 through 1963. It is a well-built projector and lends itself well to this project.
+
+2 120 485
 
 ## Camera bracket
 The Bolex 18-5 has an adjustable lamp bracket. The `arducam-bracket.scad` part is designed to attach to the lamp bracket and hold an Arducam. See [part 2 of the build](http://rob.scottclan.cc/2017/07/telecine-project-part-2-camera-and-light/).
