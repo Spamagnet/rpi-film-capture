@@ -4,6 +4,8 @@ These parts are from [Rob Scott's Bolex 18-5 build](http://rob.scottclan.cc/2017
 
 It is a well-built projector and lends itself well to this project. 
 
+All the models in this folder are released into the public domain under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/). See the `COPYING.txt` file for the full text of the license.
+
 ## Camera bracket
 The Bolex 18-5 has an adjustable lamp bracket. The `arducam-bracket.scad` part is designed to attach to the lamp bracket and hold an Arducam. See [part 2 of the build](http://rob.scottclan.cc/2017/07/telecine-project-part-2-camera-and-light/).
 
@@ -12,8 +14,3 @@ The `led-holder.scad` part is a cylindrical holder for the LED and diffuser that
 
 ## Pulley
 The `pulley.scad` part is a pulley which attaches to the NEMA 17 stepper motor and then drives the projector mechanism via a belt/O-ring. See [part 3 of the build](http://rob.scottclan.cc/2017/07/telecine-project-part-3-shutter-and-motor/).
-
-
-
-
-
