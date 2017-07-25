@@ -1,8 +1,9 @@
-OUTER_RADIUS = 12.5;
+OUTER_RADIUS = 12;
 OUTER_LENGTH = 30;
 
+CHASM_X = 7;
 CHASM_WIDTH = 14;
-CHASM_HEIGHT = 15;
+CHASM_HEIGHT = 20;
 BUFFER1 = 1;
 BUFFER2 = 2;
 
@@ -39,7 +40,7 @@ difference() {
     }
     
     // Chasm through it
-    translate([ -CHASM_HEIGHT/2, -CHASM_WIDTH/2, -BUFFER1 ]) {
+    translate([ -CHASM_X, -CHASM_WIDTH/2, -BUFFER1 ]) {
         cube([CHASM_HEIGHT, CHASM_WIDTH, OUTER_LENGTH+BUFFER2]);
     }
     
