@@ -24,14 +24,14 @@ LENS_CENTER_FROM_BASE = 33;
 LENS_D = 28.25;
 LENS_R = LENS_D/2;
 DISTANCE_LENS = 27;
-//LENS_BUFFER = 5;
-//LENS_TOTAL_HEIGHT = LENS_CENTER_FROM_BASE + LENS_R + LENS_BUFFER;
-LENS_SUPPORT_POSITION = BRACE_LENGTH + THICKNESS + DISTANCE_LENS;
+
+LENS_SUPPORT_THICKNESS = 6;
+LENS_SUPPORT_POSITION = BRACE_LENGTH + LENS_SUPPORT_THICKNESS + DISTANCE_LENS;
 LENS_SUPPORT_BUFFER = 4;
 LENS_SUPPORT_CHOP = 10;
 
 BASE_BUFFER = 6;
-BASE_LENGTH = BRACE_LENGTH + THICKNESS + DISTANCE_LENS + THICKNESS;
+BASE_LENGTH = BRACE_LENGTH + THICKNESS + DISTANCE_LENS + LENS_SUPPORT_THICKNESS;
 BASE_WIDTH = CAM_WIDTH + BASE_BUFFER*2;
 
 module prism(l, w, h){
@@ -43,7 +43,7 @@ module prism(l, w, h){
 
 module hole(r){
     rotate ([0,0,90]) {
-        cylinder (h=10, r=r, center=true);
+        cylinder (h=16, r=r, center=true);
     }
 }
 
@@ -100,14 +100,19 @@ translate([ THICKNESS, BASE_BUFFER, 0 ]){
     translate([ LENS_SUPPORT_POSITION, -LENS_SUPPORT_BUFFER, 0]){
         rotate([0,-90,0]){
             difference(){
-                cube([CAM_TOTAL_HEIGHT, CAM_WIDTH, THICKNESS]);
+                cube([CAM_TOTAL_HEIGHT, CAM_WIDTH, LENS_SUPPORT_THICKNESS]);
                 
                 translate([LENS_CENTER_FROM_BASE, CAM_HEIGHT/2 + LENS_SUPPORT_BUFFER, 0]){
                     hole(LENS_R);
-                    translate([-LENS_R,0,-THICKNESS/2])
-                    cube([LENS_D + LENS_SUPPORT_CHOP, LENS_D, THICKNESS*2]);
-                }                
+                    translate([-LENS_R, 0, -LENS_SUPPORT_THICKNESS/2])
+                    cube([LENS_D + LENS_SUPPORT_CHOP, LENS_D, LENS_SUPPORT_THICKNESS*2]);
+                }
             }
+        }
+        // Brace
+        rotate( [0,0,-90] ){
+            translate([ -THICKNESS, -BRACE_LENGTH-LENS_SUPPORT_THICKNESS,THICKNESS])
+            prism( THICKNESS, BRACE_LENGTH, BRACE_HEIGHT );
         }
     }
 }
