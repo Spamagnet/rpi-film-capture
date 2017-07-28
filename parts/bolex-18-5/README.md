@@ -7,12 +7,7 @@ It is a well-built projector and lends itself well to this project.
 All the models in this folder are released into the public domain under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/). See the `COPYING.txt` file for the full text of the license.
 
 ## Camera bracket
-
-### Mark 1
-The Bolex 18-5 has an adjustable lamp bracket. The `arducam-bracket-mark-1.scad` part is designed to attach to the lamp bracket and hold an Arducam. See [part 2 of the build](http://rob.scottclan.cc/2017/07/telecine-project-part-2-camera-and-light/).
-
-### Mark 2
-The `arducam-bracket-mark-2.scad` part is designed to be bolted directly to the metal plate. It also has a support for a [9-22mm CCTV zoom lens](http://a.co/6X0dezo), in order to prevent the fairly large lens from wobbling or vibrating.
+The `arducam-bracket.scad` part is designed to be bolted directly to the metal plate. It also has a support for a [9-22mm CCTV zoom lens](http://a.co/6X0dezo), in order to prevent the fairly large lens from wobbling or vibrating.
 
 ## Light source holder
 The `led-holder.scad` part is a cylindrical holder for the LED and diffuser that fits inside the projector lens barrel. See [part 2 of the build](http://rob.scottclan.cc/2017/07/telecine-project-part-2-camera-and-light/).
