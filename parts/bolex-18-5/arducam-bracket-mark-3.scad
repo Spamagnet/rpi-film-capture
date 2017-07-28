@@ -1,4 +1,4 @@
-PRECISION = 50;
+$fn=50;
 THICKNESS = 4;
 
 CAM_DISTANCE_FROM_BASE = 15;
@@ -15,28 +15,24 @@ CAM_HOLE_OFFSET = (CAM_WIDTH - CAM_HOLE_SPACING)/2;
 CAM_SCREW_HOLES_DISTANCE = 9;
 CAM_SCREW_HOLES_R = 2;
 
-LENS_CENTER_FROM_BASE = 33;
-LENS_D = 28.25;
-LENS_R = LENS_D/2;
-DISTANCE_LENS = 27;
-LENS_BUFFER = 5;
-LENS_TOTAL_HEIGHT = LENS_CENTER_FROM_BASE + LENS_R + LENS_BUFFER;
-
 BRACE_LENGTH = 18;
 BRACE_HEIGHT = 26;
 BRACE_THICKNESS = 5;
 BRACE_OFFSET = 10;
 
+LENS_CENTER_FROM_BASE = 33;
+LENS_D = 28.25;
+LENS_R = LENS_D/2;
+DISTANCE_LENS = 27;
+//LENS_BUFFER = 5;
+//LENS_TOTAL_HEIGHT = LENS_CENTER_FROM_BASE + LENS_R + LENS_BUFFER;
+LENS_SUPPORT_POSITION = BRACE_LENGTH + THICKNESS + DISTANCE_LENS;
+LENS_SUPPORT_BUFFER = 4;
+LENS_SUPPORT_CHOP = 10;
+
+BASE_BUFFER = 6;
 BASE_LENGTH = BRACE_LENGTH + THICKNESS + DISTANCE_LENS + THICKNESS;
-BASE_EXTRA_WIDTH = 10;
-BASE_WIDTH = CAM_WIDTH;
-BASE_TOTAL_WIDTH = BASE_WIDTH + BASE_EXTRA_WIDTH;
-BASE_HOLE_D = 4;
-BASE_HOLE_R = BASE_HOLE_D/2;
-BASE_POS0 = 7;
-BASE_POS1 = 27;
-BASE_POS2 = 43;
-BASE_HOLE_OFFSET = 5;
+BASE_WIDTH = CAM_WIDTH + BASE_BUFFER*2;
 
 module prism(l, w, h){
    polyhedron(
@@ -47,32 +43,14 @@ module prism(l, w, h){
 
 module hole(r){
     rotate ([0,0,90]) {
-        cylinder (h=10, r=r, center=true, $fn=PRECISION);
+        cylinder (h=10, r=r, center=true);
     }
 }
 
 // Base
-difference() {
-    translate([0, -BASE_EXTRA_WIDTH, 0])
-    cube([BASE_LENGTH, BASE_TOTAL_WIDTH, THICKNESS]);
-    
-    translate([BASE_POS0, BASE_WIDTH/2,0])
-    hole(BASE_HOLE_R);
-    
-    translate([BASE_POS1, BASE_HOLE_OFFSET,0])
-    hole(BASE_HOLE_R);
-    
-    translate([BASE_POS1, BASE_WIDTH-BASE_HOLE_OFFSET,0])
-    hole(BASE_HOLE_R);
-    
-    translate([BASE_POS2, BASE_HOLE_OFFSET,0])
-    hole(BASE_HOLE_R);
-    
-    translate([BASE_POS2, BASE_WIDTH-BASE_HOLE_OFFSET,0])
-    hole(BASE_HOLE_R);
-}
+cube([BASE_LENGTH, BASE_WIDTH, THICKNESS]);    
 
-translate([THICKNESS,0,0]){
+translate([ THICKNESS, BASE_BUFFER, 0 ]){
     // Braces
     rotate([0,0,-90]){
         translate([ 0, -THICKNESS, THICKNESS]){
@@ -117,19 +95,53 @@ translate([THICKNESS,0,0]){
             }
         }
     }
-
-    // Lens plate
-    translate([BRACE_LENGTH + DISTANCE_LENS + LENS_BUFFER, -BASE_EXTRA_WIDTH, 0]) {
+    
+    // Lens support
+    translate([ LENS_SUPPORT_POSITION, -LENS_SUPPORT_BUFFER, 0]){
         rotate([0,-90,0]){
             difference(){
-                cube([LENS_TOTAL_HEIGHT, CAM_WIDTH + BASE_EXTRA_WIDTH, THICKNESS]);
-                translate([LENS_CENTER_FROM_BASE, CAM_WIDTH/2 + BASE_EXTRA_WIDTH, 0]){
+                cube([CAM_TOTAL_HEIGHT, CAM_WIDTH, THICKNESS]);
+                
+                translate([LENS_CENTER_FROM_BASE, CAM_HEIGHT/2 + LENS_SUPPORT_BUFFER, 0]){
                     hole(LENS_R);
-                    translate([-LENS_R, 0, -4]){
-                    cube([LENS_D, LENS_D, 10]);
-                    }
-                }
+                    translate([-LENS_R,0,-THICKNESS/2])
+                    cube([LENS_D + LENS_SUPPORT_CHOP, LENS_D, THICKNESS*2]);
+                }                
             }
         }
     }
 }
+
+SLOT_BLOCK_BUFFER = 3;
+SLOT_LENGTH = BASE_LENGTH - (SLOT_BLOCK_BUFFER*2);
+SLOT_HEIGHT = 4;
+SLOT_BLOCK_POSITION = 0;
+SLOT_BLOCK_LENGTH = SLOT_LENGTH + (SLOT_BLOCK_BUFFER*2);
+SLOT_BLOCK_HEIGHT = SLOT_HEIGHT + (SLOT_BLOCK_BUFFER*2);
+SLOT_ROUNDED_R = 2;
+
+module slot() {
+    translate([ SLOT_LENGTH/2+SLOT_BLOCK_BUFFER, SLOT_HEIGHT/2+SLOT_BLOCK_BUFFER, THICKNESS/2 ]) {
+        difference() {
+            minkowski() {
+                cube([SLOT_BLOCK_LENGTH-(SLOT_ROUNDED_R*2), SLOT_BLOCK_HEIGHT-(SLOT_ROUNDED_R*2), THICKNESS/2], center=true);
+                cylinder (h=THICKNESS/2, r=SLOT_ROUNDED_R, center=true);
+            }
+         
+            hull() {
+                translate([ -SLOT_LENGTH/2 + SLOT_HEIGHT/2, 0, 0 ])
+                hole(SLOT_HEIGHT/2);
+
+                translate([ SLOT_LENGTH/2 - SLOT_HEIGHT/2, 0, 0 ])
+                hole(SLOT_HEIGHT/2);
+            }    
+        }
+    }
+}
+
+translate([ SLOT_BLOCK_POSITION, BASE_WIDTH - SLOT_HEIGHT/2, 0 ])
+slot();
+
+translate([ SLOT_BLOCK_POSITION, -SLOT_BLOCK_HEIGHT + SLOT_HEIGHT/2, 0 ])
+slot();
+
