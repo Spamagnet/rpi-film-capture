@@ -7,7 +7,9 @@ It is a well-built projector and lends itself well to this project.
 All the models in this folder are released into the public domain under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/). See the `COPYING.txt` file for the full text of the license.
 
 ## Camera bracket
-The `arducam-bracket.scad` part is designed to be bolted directly to the metal plate. It also has a support for a [9-22mm CCTV zoom lens](http://a.co/6X0dezo), in order to prevent the fairly large lens from wobbling or vibrating.
+The `arducam-bracket.scad` part is a bracket with has screw holes for the Arducam. It has two slots to allow the bracket to bolted directly to the metal plate. These slots allow the distance from the camera sensor to the film place to be adjusted.
+
+The `arducam-bracket-zoom-lens-support.scad` part also has a support for a [9-22mm CCTV zoom lens](http://a.co/6X0dezo), in order to prevent the fairly large lens from wobbling or vibrating. I'm not using this right now, due to issues with it blocking screw holes and getting in the way of lens adjustments.
 
 ## Light source holder
 The `led-holder.scad` part is a cylindrical holder for the LED and diffuser that fits inside the projector lens barrel. See [part 2 of the build](http://rob.scottclan.cc/2017/07/telecine-project-part-2-camera-and-light/).
