@@ -16,3 +16,6 @@ The `led-holder.scad` part is a cylindrical holder for the LED and diffuser that
 
 ## Pulley
 The `pulley.scad` part is a pulley which attaches to the NEMA 17 stepper motor and then drives the projector mechanism via a belt/O-ring. See [part 3 of the build](http://rob.scottclan.cc/2017/07/telecine-project-part-3-shutter-and-motor/).
+
+## Power and Ethernet
+The Bolex projector has two openings in its case that lend themselves well to connecting power and Ethernet. The `power-ethernet-jack-holder.scad` is a "plug" that can be placed over/in the openings and then screwed in place. Parts of it are, of course, specific to my particular build, but you can take adapt it as needed.

@@ -1,32 +1,52 @@
 $fn=50;
-openingWidth = 17.8;
-openingHeight = 25.4;
-cornerRadius = 2.0;
+openingWidth = 17.2;
+openingHeight = 24.2;
+cornerRadius = 3.0;
 openingDepth = 4.0;
-separation = 7.6;
+separation = 8.8;
 
-baseBuffer = 3.0;
+baseBufferVert = 9.0;
+baseBufferHorz = 3.0;
 baseDepth = 2.0;
-baseWidth = baseBuffer + openingWidth + baseBuffer;
-baseHeight = baseBuffer + openingHeight + separation + openingHeight + baseBuffer;
+baseWidth = baseBufferHorz + openingWidth + baseBufferHorz;
+baseHeight = baseBufferVert + openingHeight + separation + openingHeight + baseBufferVert;
 
-firstOpeningY = baseBuffer;
-secondOpeningY = baseBuffer + openingHeight + separation;
+// Screw holes
+screwHoleDiameter = 3.2;
+screwHoleRadius = screwHoleDiameter/2;
+screwHoleX = baseWidth/2;
+screwHoleOneY = baseBufferVert/2;
+screwHoleTwoY = baseHeight - baseBufferVert/2;
 
+// Openings that the plugs go through
+firstOpeningY = baseBufferVert;
+secondOpeningY = baseBufferVert + openingHeight + separation;
+
+// Hole one - Ethernet
 holeOneWidth = 15.8;
-holeOneHeight = 15.0;
-holeOneX = baseBuffer + ( openingWidth - holeOneWidth ) /2;
-holeOneY = baseBuffer + ( openingHeight - holeOneHeight ) / 2;
+holeOneHeight = 20.0;
+holeOneX = baseBufferHorz + ( openingWidth - holeOneWidth ) /2;
+holeOneY = baseBufferVert + ( openingHeight - holeOneHeight ) / 2;
 
+holeOneX = baseBufferHorz + ( openingWidth - holeOneWidth ) /2;
+holeOneY = baseBufferVert + ( openingHeight - holeOneHeight ) / 2;
+
+// Hole two - Power
 holeTwoWidth = 15.8;
-holeTwoHeight = 15.0;
-holeTwoX = baseBuffer + ( openingWidth - holeOneWidth ) /2;
-holeTwoY = secondOpeningY + ( openingHeight - holeOneHeight ) / 2;
+holeTwoHeight = 20.0;
+holeTwoX = baseBufferHorz + ( openingWidth - holeTwoWidth ) /2;
+holeTwoY = secondOpeningY + ( openingHeight - holeTwoHeight ) / 2;
 
-//hull() {
-//    translate([15,10,0]) circle(10);
-//    circle(10);
-//}
+powerBoxWidth = 16.4;
+powerBoxHeight = openingHeight - 2.0;
+powerPortDiameter = 12.6 + 0.8;
+powerPortRadius = powerPortDiameter / 2;
+powerPortDepth = 4.0;
+powerPortInset = 2.0;
+powerPortInsetBorder = 1.0;
+
+powerBoxX = baseBufferHorz + ( openingWidth - powerBoxWidth ) /2;
+powerBoxY = secondOpeningY + ( openingHeight - powerBoxHeight ) / 2;
 
 module plug(w, h, d, cr){
     linear_extrude(d)
@@ -47,21 +67,40 @@ module plug(w, h, d, cr){
 
 difference() {
     union() {
-        translate([0,0,openingDepth])
+        translate([0, 0, openingDepth])
         cube( [baseWidth, baseHeight, baseDepth] );
 
-        translate( [ baseBuffer, firstOpeningY, 0] ) {
+        translate( [ baseBufferHorz, firstOpeningY, 0] ) {
             plug( openingWidth, openingHeight, openingDepth, cornerRadius );
         }
 
-        translate( [ baseBuffer, secondOpeningY, 0] ) {
+        translate( [ baseBufferHorz, secondOpeningY, 0] ) {
             plug( openingWidth, openingHeight, openingDepth, cornerRadius );
         }
     }
+    
+    // Screw holes
+    translate( [screwHoleX, screwHoleOneY, -1] )
+    cylinder( h=20, r=screwHoleRadius, center=true );
 
+    translate( [screwHoleX, screwHoleTwoY, -1] )
+    cylinder( h=20, r=screwHoleRadius, center=true );
+    
+    // Hole one
     translate( [holeOneX, holeOneY, -10 ] )
     cube( [holeOneWidth, holeOneHeight, 50] );
 
-    translate( [holeTwoX, holeTwoY, -10 ] )
-    cube( [holeTwoWidth, holeTwoHeight, 50] );
+    // Hole two
+    translate( [powerBoxX, powerBoxY, 0 ] ) {
+        union() {
+            translate([ powerBoxWidth/2, powerBoxHeight/2, 0]) {
+                translate( [0, 0, 0 ])
+                cylinder( h=powerPortInset, r=powerPortRadius+powerPortInsetBorder, center=true );
+                
+                translate( [0, 0, powerPortInset ])
+                cylinder( h=powerPortDepth+5, r=powerPortRadius, center=true );
+            }
+        }
+    }
+
 }
